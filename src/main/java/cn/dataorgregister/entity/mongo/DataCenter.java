@@ -10,9 +10,9 @@ import java.util.Date;
  * @version 1.0
  * Create by 2022/9/1 15:31
  */
-@Document(collection = "register_dc")
+@Document(collection = "datacenter")
 @Data
-public class RegisterDc {
+public class DataCenter {
     private String id;
     private String dataCenterNameEN; //数据集英文名称
     private String dataCenterNameCN; //数据集中文名称
