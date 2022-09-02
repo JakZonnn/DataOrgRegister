@@ -1,0 +1,11 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: dataorgregister
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/register
+
+swagger2:
+  enable: true
