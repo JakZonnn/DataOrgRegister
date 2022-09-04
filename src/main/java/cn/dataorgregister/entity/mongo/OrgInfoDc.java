@@ -14,10 +14,10 @@ public class OrgInfoDc {
     private String buildOrgName; //参建单位名称
     private String supOrgName; //技术支持机构名称
     private String storageCap; //存储能力
-    private String teamSize; //团队规模
+    private Integer teamSize; //团队规模
     private Double officeSpace; //办公面积
     private Double computerRoomSpace; //机房面积
     private String securityLevel; //网络安全等保级别
-    private String feedback; //专家指导与反馈
+    private boolean feedback; //专家指导与反馈
 
 }

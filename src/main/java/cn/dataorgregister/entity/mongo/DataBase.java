@@ -28,13 +28,14 @@ public class DataBase {
     private String introductionEN;
     private String introductionCN;
     private String subject; //学科分类
+    private List<String> dataType;
     private Long size; //数据库数据量
     private String urlDb; //数据库主页url
     private Long count; //数据集条数
     private String logo; //logo
     private String serviceType; //服务类型
-    private String license; //数据许可证
-    private String certification; //认证与收录
+    private List<String> license; //数据许可证
+    private List<String> certification; //认证与收录
     private Date joinDate; //加入日期
     private Date updateDate; //更新日期
     //数据库组织机构信息

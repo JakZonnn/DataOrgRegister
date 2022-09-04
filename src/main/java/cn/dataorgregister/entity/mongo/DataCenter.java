@@ -4,6 +4,7 @@ import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ZJ
@@ -25,7 +26,7 @@ public class DataCenter {
     private String logo; //logo
     private String submitPlatform; //汇交平台url
     private String dcType; //数据中心类型
-    private String certification; //认证与收录
+    private List<String> certification; //认证与收录
     private Date joinDate; //加入日期
     private Date updateDate; //更新日期
     //数据中心组织机构信息

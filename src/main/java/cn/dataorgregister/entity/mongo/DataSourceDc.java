@@ -2,6 +2,8 @@ package cn.dataorgregister.entity.mongo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author ZJ
  * @version 1.0
@@ -10,12 +12,12 @@ import lombok.Data;
 @Data
 public class DataSourceDc {
     private String subject; //学科分类
-    private String dataType; //数据资源类型
-    private Double size; //数据量
+    private List<String> dataType; //数据资源类型
+    private Long size; //数据量
     private String dataSourceOverview; //主要资源情况
     private String serviceObject; //主要服务对象
-    private String metaStandardName; //元数据标准名称
-    private String uniIdentifier; //唯一标识
+    private List<String> metaStandardName; //元数据标准名称
+    private List<String> uniIdentifier; //唯一标识
     private boolean qualityControl; //质量控制
     private boolean versionControl; //版本控制
 
