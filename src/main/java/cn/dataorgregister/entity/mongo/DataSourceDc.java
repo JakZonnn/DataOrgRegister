@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Data
 public class DataSourceDc {
-    private String subject; //学科分类
+    private Subject subject; //学科分类
     private List<String> dataType; //数据资源类型
     private Long size; //数据量
     private String dataSourceOverview; //主要资源情况

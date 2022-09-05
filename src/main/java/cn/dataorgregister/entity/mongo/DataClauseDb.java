@@ -16,5 +16,4 @@ public class DataClauseDb {
     private List<String> authority; //数据库访问权限
     private List<String> limitType; //访问限制类型
     private List<String> licenseDb; //数据库许可证书
-
 }

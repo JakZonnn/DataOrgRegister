@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import cn.dataorgregister.entity.mongo.EnumerationIdentify;
 
 /**
  * @author ZJ
@@ -36,21 +38,23 @@ public class UserServiceImpl implements UserService {
         registerDb.setCount(Long.valueOf("98789323767578487"));
 
 
-        registerDb.setSad(DataBase.DataTypeEnum.REPORT);
-
         Date utilDate = new Date();
         Date sqlDate = new Date(utilDate.getTime());
         registerDb.setJoinDate(sqlDate);
 
         registerDb.setIntroductionEN("i am basic");
-        registerDb.setLicense("dwpoj2123");
-        registerDb.setCertification("783eh2o3i");
+        List<String> lic = new ArrayList<>();
+        lic.add("dewd");
+        lic.add("dede");
+        lic.add("vtr");
+        registerDb.setLicense(lic);
+//        registerDb.setCertification("783eh2o3i");
         registerDb.setServiceType("alltypeser");
         registerDb.setSize(382820932032L);
         registerDb.setUrlDb("www.cooc.com");
 
         OrgInfoDb orgInfoDb = new OrgInfoDb();
-        orgInfoDb.setBuildOrgName("china");
+//        orgInfoDb.setBuildOrgName("china");
         orgInfoDb.setEmail("123@cnic.cn");
         orgInfoDb.setOrgName("CAS");
         orgInfoDb.setLocation("beijing");
@@ -60,21 +64,32 @@ public class UserServiceImpl implements UserService {
         registerDb.setOrgInfoDb(orgInfoDb);
 
         DataClauseDb dataClauseDb = new DataClauseDb();
-        dataClauseDb.setDataPolicy("do not know");
-        dataClauseDb.setAuthority("everyone");
-        dataClauseDb.setLicenseDb("dbdb");
-        dataClauseDb.setLimitType("alltype");
+//        dataClauseDb.setDataPolicy("do not know");
+//        dataClauseDb.setAuthority("everyone");
+//        dataClauseDb.setLicenseDb("dbdb");
+//        dataClauseDb.setLimitType("alltype");
         registerDb.setDataClauseDb(dataClauseDb);
 
         StandardDb standardDb = new StandardDb();
-        standardDb.setMetaStandardName("meta");
+//        standardDb.setMetaStandardName("meta");
         standardDb.setMetaStandardSchema("toall");
-        standardDb.setApisType("jiji");
+//        standardDb.setApisType("jiji");
         standardDb.setApisUrl("www.wowo.com");
-        standardDb.setUniIdentifierSystem("unnifo");
+//        standardDb.setUniIdentifierSystem("unnifo");
         standardDb.setQualityControl(true);
         standardDb.setVersionControl(true);
         registerDb.setStandardDb(standardDb);
+
+        registerDb.setCreateTime(sqlDate);
+        registerDb.setUpdateTime(sqlDate);
+
+        List<String> dataType = new ArrayList<>();
+        dataType.add(EnumerationIdentify.DATATYPE_DATASET.msg());
+        dataType.add(EnumerationIdentify.DATATYPE_JOURNALPAPER.msg());
+        dataType.add(EnumerationIdentify.DATATPYE_BOOK.msg());
+        registerDb.setDataType(dataType);
+
+
 
 
         registerDbRepository.save(registerDb);

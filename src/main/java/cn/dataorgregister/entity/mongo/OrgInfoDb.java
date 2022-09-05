@@ -2,6 +2,8 @@ package cn.dataorgregister.entity.mongo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author ZJ
  * @version 1.0
@@ -11,7 +13,7 @@ import lombok.Data;
 public class OrgInfoDb {
     private String orgName; //依托单位名称
     private String location; //所在地
-    private String buildOrgName; //参建单位名称
+    private List<String> buildOrgName; //参建单位名称
     private String supOrgName; //技术支持机构名称
     private String contactName; //联系人姓名
     private String email; //联系人邮箱

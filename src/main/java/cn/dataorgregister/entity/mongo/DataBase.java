@@ -1,5 +1,6 @@
 package cn.dataorgregister.entity.mongo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.Getter;
 import org.omg.CORBA.PRIVATE_MEMBER;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 @Document(collection = "database")
 @Data
-public class DataBase {
+public class DataBase extends Base {
     //基本信息
     @Id
     private String id;
@@ -27,8 +28,8 @@ public class DataBase {
     private String abbEN; //英文名称缩写
     private String introductionEN;
     private String introductionCN;
-    private String subject; //学科分类
-    private List<String> dataType;
+    private Subject subject; //学科分类
+    private List<String> dataType; //数据类型
     private Long size; //数据库数据量
     private String urlDb; //数据库主页url
     private Long count; //数据集条数
@@ -36,7 +37,9 @@ public class DataBase {
     private String serviceType; //服务类型
     private List<String> license; //数据许可证
     private List<String> certification; //认证与收录
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date joinDate; //加入日期
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date updateDate; //更新日期
     //数据库组织机构信息
     private OrgInfoDb orgInfoDb;
@@ -45,25 +48,9 @@ public class DataBase {
     //数据库标准注册
     private StandardDb standardDb;
 
-    private DataTypeEnum sad;
 
-    private List<AVB> sae;
 
-//以下是不同字段的枚举，多选用list存list<枚举名字>，如private List<AVB> sae，单选直接写枚举名字，如private DataTypeEnum sad；
-// 枚举可以写成内部类，也可以单独写一个类，单独写就需要写出接受code和msd的两个变量，
-    @Getter
-    public enum DataTypeEnum{
-        DATASET,
-        LW,
-        REPORT
-    }
 
-    @Getter
-    public enum AVB{
-        dfihow,
-        lw,
-        REPORT
-    }
 
 
 

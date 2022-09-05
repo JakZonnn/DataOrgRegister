@@ -1,5 +1,6 @@
 package cn.dataorgregister.entity.mongo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,7 +14,7 @@ import java.util.List;
  */
 @Document(collection = "datacenter")
 @Data
-public class DataCenter {
+public class DataCenter extends Base{
     private String id;
     private String dataCenterNameEN; //数据集英文名称
     private String dataCenterNameCN; //数据集中文名称
@@ -27,7 +28,9 @@ public class DataCenter {
     private String submitPlatform; //汇交平台url
     private String dcType; //数据中心类型
     private List<String> certification; //认证与收录
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date joinDate; //加入日期
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date updateDate; //更新日期
     //数据中心组织机构信息
     private OrgInfoDc orgInfoDc;

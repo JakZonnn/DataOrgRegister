@@ -11,14 +11,14 @@ import lombok.Data;
 public class PersonInfoDc {
     //主任/副主任
     private String typeDean;
-    private String name; //姓名
-    private String uniIdentifier; //唯一标识符
-    private String workPlace; //工作单位
-    private String position; //职务
-    private String title; //职称
-    private String phone; //电话
-    private String email; //邮箱
-    private String introduction; //介绍
+    private String nameDean; //姓名
+    private String uniIdentifierDean; //唯一标识符
+    private String workPlaceDean; //工作单位
+    private String positionDean; //职务
+    private String titleDean; //职称
+    private String phoneDean; //电话
+    private String emailDean; //邮箱
+    private String introductionDean; //介绍
 
 
 //    //副主任
