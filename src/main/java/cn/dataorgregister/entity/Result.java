@@ -1,33 +1,21 @@
 package cn.dataorgregister.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-import java.util.Map;
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
 @Data
-public class Result {
+public class Result<T> {
 
     private int code;// 编码
 
     private String message;// 返回信息
 
-    private Map<String, Object> data;
-
-    public Result() {
-    }
-
-    /**
-     * Instantiates a new wrapper.
-     *
-     * @param code    the code
-     * @param message the message
-     * @param data  the data
-     */
-    Result(int code, String message, Map data) {
-        super();
-        this.code(code).message(message).data(data);
-    }
-
+    private T data;
 
 
     /**
@@ -63,7 +51,7 @@ public class Result {
      * Sets the 结果数据 , 返回自身的引用.
      *
      */
-    public Result data(Map data) {
+    public Result data(T data) {
         this.setData(data);
         return this;
     }

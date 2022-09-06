@@ -15,10 +15,7 @@ public class Subject {
   private String twoRankId;
   private String oneRankName;
   private String threeRankName;
-  private String twoRankName;
-  private String oneRankNo;
   private String threeRankNo;
-  private String twoRankNo;
 
 
 //  public String getId() {

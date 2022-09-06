@@ -1,6 +1,5 @@
 package cn.dataorgregister;
 
-import cn.dataorgregister.entity.mongo.Location;
 import cn.dataorgregister.repository.mongo.LocationRepository;
 import cn.dataorgregister.utils.GsonUtils;
 import lombok.SneakyThrows;
@@ -66,33 +65,33 @@ class DataOrgRegisterApplicationTests {
 //                }
 //            }
 //        }
-        List<Map<String,Object>> data =(List<Map<String,Object>>) map.get("data");
-        List<Location> lo = new ArrayList<>();
-        for (Map<String,Object> m :data){
-            List<Map<String,Object>> cityMap = (List<Map<String,Object>>) m.get("clist");
-            if (null != cityMap && cityMap.size() > 0){
-                for (Map<String,Object> cm: cityMap){
-                    Location l = new Location();
-                    l.setCountry(m.get("name").toString());
-                    l.setCountryCode(m.get("code").toString());
-                    l.setCityCode(cm.get("code").toString());
-                    l.setCity(cm.get("name").toString());
-                    List<Map<String,Object>> areaMap =(List<Map<String,Object>>) cm.get("pchilds");
-                    l.setCchilds(areaMap);
-                    lo.add(l);
-                }
-            }
-        }
-
-        locationRepository.saveAll(lo);
-
-        System.out.println(lo.size());
-
-        for (int i = 0; i < lo.size() ;i++){
-
-            System.out.println(lo.get(i).toString());
-
-        }
+//        List<Map<String,Object>> data =(List<Map<String,Object>>) map.get("data");
+//        List<Location> lo = new ArrayList<>();
+//        for (Map<String,Object> m :data){
+//            List<Map<String,Object>> cityMap = (List<Map<String,Object>>) m.get("clist");
+//            if (null != cityMap && cityMap.size() > 0){
+//                for (Map<String,Object> cm: cityMap){
+//                    Location l = new Location();
+//                    l.setCountry(m.get("name").toString());
+//                    l.setCountryCode(m.get("code").toString());
+//                    l.setCityCode(cm.get("code").toString());
+//                    l.setCity(cm.get("name").toString());
+//                    List<Map<String,Object>> areaMap =(List<Map<String,Object>>) cm.get("pchilds");
+//                    l.setCchilds(areaMap);
+//                    lo.add(l);
+//                }
+//            }
+//        }
+//
+//        locationRepository.saveAll(lo);
+//
+//        System.out.println(lo.size());
+//
+//        for (int i = 0; i < lo.size() ;i++){
+//
+//            System.out.println(lo.get(i).toString());
+//
+//        }
 
 
     }

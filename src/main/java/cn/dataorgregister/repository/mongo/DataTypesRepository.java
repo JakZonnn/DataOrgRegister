@@ -1,10 +1,8 @@
 package cn.dataorgregister.repository.mongo;
-
-import cn.dataorgregister.entity.mongo.orgregister.DataBase;
+import cn.dataorgregister.entity.mongo.DataTypes;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DataBaseRepository extends MongoRepository<DataBase, String> {
-
+public interface DataTypesRepository extends MongoRepository<DataTypes,String> {
 }

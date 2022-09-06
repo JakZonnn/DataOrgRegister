@@ -17,3 +17,13 @@ private List<AVB> sae;
         lw,
         REPORT
     }
+
+    将枚举里的选择转换为list并返回 (只是个雏形)
+ArrayList<DataTypeEnum> dataTypeEnumList = new ArrayList<>(Arrays.asList(DataTypeEnum.values()));  //将枚举里的选择转换为list
+        ArrayList data = new ArrayList<>();
+        for (DataTypeEnum dataTypeEnum: dataTypeEnumList) {
+            Integer code = dataTypeEnum.code();
+            String msg = dataTypeEnum.msg();
+            HashMap map = new HashMap();
+            map.put();
+        }

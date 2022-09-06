@@ -16,11 +16,11 @@ public interface CommonService {
      *
      * @return Result
      */
-    default Result success(Map<String, Object> map) {
+    default <T> Result<T> success(T data) {
         Result Result = new Result();
         Result.setCode(HttpStatus.OK.value());
         Result.setMessage("success");
-        Result.setData(map);
+        Result.setData(data);
         return Result;
     }
 
@@ -57,6 +57,19 @@ public interface CommonService {
         Result.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         Result.setMessage("error");
         return Result;
+    }
+
+    /**
+     * 服务调用失败默认返回401
+     *
+     * @return Result
+     */
+    default <T>Result<T> fail(String message,T data){
+        Result result = new Result();
+        result.setCode(HttpStatus.UNAUTHORIZED.value());
+        result.setMessage(message);
+        result.setData(data);
+        return result;
     }
 
     /**

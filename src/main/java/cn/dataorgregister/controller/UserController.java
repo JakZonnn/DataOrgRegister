@@ -1,11 +1,11 @@
 package cn.dataorgregister.controller;
 
 import cn.dataorgregister.entity.Result;
-import cn.dataorgregister.entity.mongo.DataBase;
-import cn.dataorgregister.entity.mongo.DataCenter;
+//import cn.dataorgregister.entity.mongo.dictionarytable.DataTypeEnum;
+import cn.dataorgregister.entity.mongo.orgregister.DataBase;
+import cn.dataorgregister.entity.mongo.orgregister.DataCenter;
+import cn.dataorgregister.entity.mongo.user.User;
 import cn.dataorgregister.service.UserService;
-import cn.dataorgregister.utils.GetDataFromRequest;
-import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,12 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import javax.validation.Valid;
 
 /**
  * @author ZJ
@@ -50,6 +47,12 @@ public class UserController {
 //                           @RequestBody DataCenter dataCenter) {
 //        return userService.register(request,dataBase,dataCenter);
 //    }
+    @ApiOperation("用户注册")
+    @PostMapping("/register")
+    public Result register(@Valid User user){
+        Result register = userService.register(user);
+        return register;
+    }
 
 
     @ApiOperation("数据库注册")
@@ -57,8 +60,8 @@ public class UserController {
             @ApiImplicitParam(name = "DataBase", required = true, value = "数据库注册")
     })
     @PostMapping("/registerDatabase")
-    public Result registerDb(@RequestBody DataBase dataBase) {
-        return userService.registerDb(dataBase);
+    public Result registerDb(@RequestBody DataBase dataBase, MultipartFile file) {
+        return userService.registerDb(dataBase,file);
     }
 
     @ApiOperation("数据中心注册")
@@ -66,9 +69,122 @@ public class UserController {
             @ApiImplicitParam(name = "DataCenter", required = true, value = "数据中心注册")
     })
     @PostMapping("/registerDataCenter")
-    public Result registerDc(@RequestBody DataCenter dataCenter) {
-        return userService.registerDc(dataCenter);
+    public Result registerDc(@RequestBody DataCenter dataCenter, MultipartFile file) {
+        return userService.registerDc(dataCenter,file);
     }
+
+    // TODO: 2022/9/9 需考虑
+    @ApiOperation("查看学科分类")
+    @GetMapping("/getSubject")
+    public Result getSubject(){
+        return userService.getSubject();
+    }
+
+    // TODO: 2022/9/9 需考虑
+    @ApiOperation("查看地点")
+    @GetMapping("/getLocation")
+    public Result getLocation(){
+        return userService.getlocation();
+    }
+
+
+    @ApiOperation("查看Apis类型")
+    @GetMapping("/getApisType")
+    public Result getApisType(){
+        return userService.getApisType();
+    }
+
+    @ApiOperation("查看数据库访问权限")
+    @GetMapping("/getAuthority")
+    public Result getAuthority(){
+        return userService.getAuthority();
+    }
+
+    @ApiOperation("查看认证与收录")
+    @GetMapping("/getCertification")
+    public Result getCertification(){
+        return userService.getCertification();
+    }
+
+    @ApiOperation("查看数据中心类型")
+    @GetMapping("/getDatacenterType")
+    public Result getDatacenterType(){
+        return userService.getDatacenterType();
+    }
+
+    @ApiOperation("查看数据许可证")
+    @GetMapping("/getDataLicense")
+    public Result getDataLicense(){
+        return userService.getDataLicense();
+    }
+
+    @ApiOperation("查看数据类型")
+    @GetMapping("/getDataTypes")
+    public Result getDataTypes(){
+        return userService.getDataTypes();
+    }
+
+    @ApiOperation("查看数据库许可证书")
+    @GetMapping("/getLicenseDb")
+    public Result getLicenseDb(){
+        return userService.getLicenseDb();
+    }
+
+    @ApiOperation("查看访问限制类型")
+    @GetMapping("/getLimitType")
+    public Result getLimitType(){
+        return userService.getLimitType();
+    }
+
+    @ApiOperation("查看元数据标准名称")
+    @GetMapping("/getMetaStandardName")
+    public Result getMetaStandardName(){
+        return userService.getMetaStandardName();
+    }
+
+    @ApiOperation("查看网络安全等保级别")
+    @GetMapping("/getSecurityLevel")
+    public Result getSecurityLevel(){
+        return userService.getSecurityLevel();
+    }
+
+    @ApiOperation("查看服务类型")
+    @GetMapping("/getServiceType")
+    public Result getServiceType(){
+        return userService.getServiceType();
+    }
+
+    @ApiOperation("查看唯一标识")
+    @GetMapping("/getUniIdentifier")
+    public Result getUniIdentifier(){
+        return userService.getUniIdentifier();
+    }
+
+    @ApiOperation("查看支持的唯一标识符系统")
+    @GetMapping("/getUniIdentifierSystem")
+    public Result getUniIdentifierSystem(){
+        return userService.getUniIdentifierSystem();
+    }
+
+
+//    @RequestMapping("/writeDataType")
+//    public void writeDataType(UniIdentifierSystem uniIdentifierSystem){
+//        userService.writeDataType(uniIdentifierSystem);
+
+
+//    @GetMapping("/datatype")
+//    public Result datatype(){
+////        EnumSet<DataTypeEnum> dataTypeEnums = EnumSet.allOf(DataTypeEnum.class);
+//        ArrayList<DataTypeEnum> dataTypeEnumList = new ArrayList<>(Arrays.asList(DataTypeEnum.values()));
+//        ArrayList data = new ArrayList<>();
+//        for (DataTypeEnum dataTypeEnum: dataTypeEnumList) {
+//            Integer code = dataTypeEnum.code();
+//            String msg = dataTypeEnum.msg();
+//            HashMap map = new HashMap();
+//            map.put();
+//        }
+//        return
+//    }
 
 //    @ApiOperation("登录")
 //    @PostMapping("/register")

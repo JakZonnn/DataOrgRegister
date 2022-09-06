@@ -1,14 +1,11 @@
-package cn.dataorgregister.entity.mongo;
+package cn.dataorgregister.entity.mongo.orgregister;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.Getter;
-import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.xml.soap.SAAJResult;
 import java.util.Date;
 import java.util.List;
 
@@ -22,14 +19,14 @@ import java.util.List;
 public class DataBase extends Base {
     //基本信息
     @Id
-    @ApiModelProperty("主键")
+//    @ApiModelProperty("主键")
     private String id;
 
     @ApiModelProperty(value = "数据库中文名称",required = true)
-    private String dataBaseNameEN; //数据库中文名称
+    private String dataBaseNameEN; //数据库英文名称
 
-    @ApiModelProperty("数据库英文名称")
-    private String dataBaseNameCN; //数据库英文名称
+    @ApiModelProperty(value = "数据库英文名称",required = true)
+    private String dataBaseNameCN; //数据库中文名称
 
     @ApiModelProperty("数据库唯一标识符")
     private String uniIdentifier; //数据库唯一标识符
@@ -44,32 +41,46 @@ public class DataBase extends Base {
     private String introductionCN;
 
     @ApiModelProperty(value = "学科分类",required = true)
-    private Subject subject; //学科分类
+    private List<String> subjectsId; //学科分类id
 
-    @ApiModelProperty("数据类型")
+    @ApiModelProperty(value = "数据类型",required = true)
     private List<String> dataType; //数据类型
+
+    @ApiModelProperty(value = "数据库数据量",required = true)
     private Long size; //数据库数据量
+
+    @ApiModelProperty(value = "数据库主页url",required = true)
     private String urlDb; //数据库主页url
+
+    @ApiModelProperty(value = "数据集条数",required = true)
     private Long count; //数据集条数
-    private String logo; //logo
-    private String serviceType; //服务类型
+
+    @ApiModelProperty("logo")
+    private String logoPath; //logo，存一个路径，路径下放logo图片
+
+    @ApiModelProperty("服务类型")
+    private List<String> serviceType; //服务类型
+
+    @ApiModelProperty("数据许可证")
     private List<String> license; //数据许可证
+
+    @ApiModelProperty("认证与收录")
     private List<String> certification; //认证与收录
+
+    @ApiModelProperty("加入日期")
     @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date joinDate; //加入日期
+
+    @ApiModelProperty("更新日期")
     @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date updateDate; //更新日期
+
     //数据库组织机构信息
     private OrgInfoDb orgInfoDb;
     //数据库数据条款注册
     private DataClauseDb dataClauseDb;
     //数据库标准注册
     private StandardDb standardDb;
-
-
-
-
-
 
 
 }

@@ -5,7 +5,7 @@ spring:
     name: dataorgregister
   data:
     mongodb:
-      uri: mongodb://127.0.0.1:27017/register
+      uri: mongodb://127.0.0.1:27017/dataorg
 
 swagger2:
   enable: true
