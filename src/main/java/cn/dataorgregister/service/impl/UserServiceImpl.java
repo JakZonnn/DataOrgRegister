@@ -97,13 +97,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public Result registerDb(DataBase dataBase) {
         DataBase save = dataBaseRepository.save(dataBase);
-        return success();
+        if(save != null){
+            return success();
+        }
+        return fail();
+
     }
 
     @Override
     public Result registerDc(DataCenter dataCenter) {
         DataCenter save = dataCenterRespository.save(dataCenter);
-        return success();
+        if(save != null){
+            return success();
+        }
+        return fail();
     }
 
 //    @Override
