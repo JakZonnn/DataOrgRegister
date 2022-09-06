@@ -1,7 +1,9 @@
 package cn.dataorgregister.entity.mongo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -15,12 +17,14 @@ import java.util.List;
 @Document(collection = "datacenter")
 @Data
 public class DataCenter extends Base{
+    @Id
     private String id;
-    private String dataCenterNameEN; //数据集英文名称
-    private String dataCenterNameCN; //数据集中文名称
+
+    private String dataCenterNameEN; //数据中心英文名称
+    private String dataCenterNameCN; //数据中心中文名称
     private String uniIdentifierDc; //数据中心唯一标识符
     private String abbEN; //英文名称缩写
-    private String location; //所在地
+    private Location location; //所在地
     private String introductionEN;
     private String introductionCN;
     private String urlDc; //数据中心主页url

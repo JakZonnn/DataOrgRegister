@@ -2,8 +2,10 @@ package cn.dataorgregister.entity.mongo;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
+@Document(collection = "subject")
 public class Subject {
   @Id
   private String id;

@@ -1,6 +1,7 @@
 package cn.dataorgregister.entity.mongo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import org.omg.CORBA.PRIVATE_MEMBER;
@@ -21,14 +22,31 @@ import java.util.List;
 public class DataBase extends Base {
     //基本信息
     @Id
+    @ApiModelProperty("主键")
     private String id;
-    private String dataBaseNameEN; //数据集中文名称
-    private String dataBaseNameCN; //数据集英文名称
+
+    @ApiModelProperty(value = "数据库中文名称",required = true)
+    private String dataBaseNameEN; //数据库中文名称
+
+    @ApiModelProperty("数据库英文名称")
+    private String dataBaseNameCN; //数据库英文名称
+
+    @ApiModelProperty("数据库唯一标识符")
     private String uniIdentifier; //数据库唯一标识符
+
+    @ApiModelProperty("英文名称缩写")
     private String abbEN; //英文名称缩写
+
+    @ApiModelProperty(value = "数据库介绍英文",required = true)
     private String introductionEN;
+
+    @ApiModelProperty(value = "数据库介绍中文",required = true)
     private String introductionCN;
+
+    @ApiModelProperty(value = "学科分类",required = true)
     private Subject subject; //学科分类
+
+    @ApiModelProperty("数据类型")
     private List<String> dataType; //数据类型
     private Long size; //数据库数据量
     private String urlDb; //数据库主页url

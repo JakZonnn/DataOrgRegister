@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class OrgInfoDb {
     private String orgName; //依托单位名称
-    private String location; //所在地
+    private Location location; //所在地
     private List<String> buildOrgName; //参建单位名称
     private String supOrgName; //技术支持机构名称
     private String contactName; //联系人姓名
