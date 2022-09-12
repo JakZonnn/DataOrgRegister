@@ -6,6 +6,22 @@ spring:
   data:
     mongodb:
       uri: mongodb://127.0.0.1:27017/dataorg
+  mail:
+    default-encoding: utf-8
+    host: mail.cstnet.cn
+    port: 465
+    username: casdc@cnic.cn
+    password: #找他们问一下
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
 
 swagger2:
   enable: true

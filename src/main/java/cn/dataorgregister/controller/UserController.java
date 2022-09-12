@@ -54,6 +54,16 @@ public class UserController {
         return register;
     }
 
+    @ApiOperation("用户注册发送验证码")
+    @PostMapping("/sendcode")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "email",value = "用户邮箱",paramType = "String",required = true)
+    })
+    public Result sendCode(@RequestParam("eamil"), String email){
+        userService.sendCode(email);
+    }
+
+
 
     @ApiOperation("数据库注册")
     @ApiImplicitParams({

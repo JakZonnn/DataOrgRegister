@@ -47,6 +47,14 @@ public interface CommonService {
         return Result;
     }
 
+    default <T>Result<T> success(int code,String message,T data){
+        Result result = new Result();
+        result.setCode(code);
+        result.setMessage(message);
+        result.setData(data);
+        return result;
+    }
+
     /**
      * 服务调用失败默认返回结果
      *
@@ -67,6 +75,19 @@ public interface CommonService {
     default <T>Result<T> fail(String message,T data){
         Result result = new Result();
         result.setCode(HttpStatus.UNAUTHORIZED.value());
+        result.setMessage(message);
+        result.setData(data);
+        return result;
+    }
+
+    /**
+     * 服务调用失败返回错误信息
+     *
+     * @return Result
+     */
+    default <T>Result<T> fail(int code,String message,T data){
+        Result result = new Result();
+        result.setCode(code);
         result.setMessage(message);
         result.setData(data);
         return result;

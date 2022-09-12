@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 
 @Data
-@Document(collection = "用户")
+@Document(collection = "user")
 public class User implements Serializable {
     @Id
     private String id;
@@ -35,6 +35,10 @@ public class User implements Serializable {
     @Pattern(regexp = "[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+", message = "邮箱格式不正确")
     @NotBlank(message = "邮箱不能为空")
     private String email;
+
+    @ApiModelProperty(value = "邮箱验证码", required = true)
+    @NotBlank(message = "邮箱验证码不能为空")
+    private String emailCode;
 
     @ApiModelProperty(value = "密码", required = true)
     @NotBlank(message = "密码不能为空")

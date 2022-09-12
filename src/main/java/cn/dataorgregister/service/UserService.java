@@ -13,6 +13,7 @@ public interface UserService extends CommonService{
     Result register(User user);
     Result registerDb(DataBase dataBase, MultipartFile file);
     Result registerDc(DataCenter dataCenter, MultipartFile file);
+    Result sendCode(String email);
 
 
 

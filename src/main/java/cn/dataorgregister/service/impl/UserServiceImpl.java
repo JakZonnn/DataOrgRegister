@@ -4,11 +4,22 @@ import cn.dataorgregister.entity.Result;
 import cn.dataorgregister.entity.mongo.*;
 import cn.dataorgregister.entity.mongo.orgregister.DataBase;
 import cn.dataorgregister.entity.mongo.orgregister.DataCenter;
+import cn.dataorgregister.entity.mongo.user.Code;
 import cn.dataorgregister.entity.mongo.user.User;
 import cn.dataorgregister.repository.mongo.*;
 import cn.dataorgregister.service.UserService;
+import cn.dataorgregister.utils.VerifyCode;
+import com.mongodb.client.result.UpdateResult;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,8 +32,13 @@ import java.util.*;
  * Create by 2022/9/1 16:41
  */
 @Service
-
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username}")
+    private String sendEmail;
+
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -75,6 +91,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CodeRepository codeRepository;
 
 
 //    @Override
@@ -144,9 +163,55 @@ public class UserServiceImpl implements UserService {
         if (user == null){
             return fail("参数不可为空");
         }
-        Result byEmail = userRepository.findByEmail(user.getEmail());
+        String email = user.getEmail();
+        User byEmail = userRepository.findByEmail(email);
+        if (Objects.isNull(byEmail)){
+            String emailCode = byEmail.getEmailCode();
+            if (emailCode == null){
+                return new Result(HttpStatus.UNAUTHORIZED.value(), "请发送验证码到邮箱",null);
+            }
 
 
+        }else{
+            return fail(HttpStatus.UNAUTHORIZED.value(),"用户已存在",null);
+        }
+
+    }
+
+    @Override
+    public Result sendCode(String email) {
+        //判断user表中是否有该邮箱
+        User byEmail = userRepository.findByEmail(email);
+        if (Objects.isNull(byEmail)){
+            String code = VerifyCode.sendCode(6);
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setFrom(sendEmail);
+            mailMessage.setTo(email);
+            mailMessage.setSubject("中国科学院科学数据总中心");
+            mailMessage.setText("尊敬的用户,您好:\n您的邮箱验证码为：" + code);
+            javaMailSender.send(mailMessage);
+            //将验证码存入mogodb，Code中
+            Code code1 = new Code();
+            code1.setEmail(email);
+            code1.setCreateTime(new Date());
+            code1.setCode(code);
+            codeRepository.save(code1);
+            //查询对应邮箱是否有验证码
+            String emailCode = byEmail.getEmailCode();
+            //没有验证码就插入，有的话更新
+            if (emailCode == null){
+                String codeInsert = mongoTemplate.insert(code, "user");
+                return success(HttpStatus.OK.value(),"验证码发送成功",codeInsert);
+            }
+            else {
+                User user = new User();
+                Query queryCode = new Query(Criteria.where(email).is(user.getEmail()));
+                Update updateCode = new Update().set(code,user.getEmailCode());
+                UpdateResult updateResult = mongoTemplate.updateFirst(queryCode, updateCode, User.class);
+                return success(HttpStatus.OK.value(),"验证码发送成功",updateResult);
+            }
+        }
+        return fail(HttpStatus.UNAUTHORIZED.value(),"该邮箱已被注册",null);
     }
 
     @Override
