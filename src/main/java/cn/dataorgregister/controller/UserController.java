@@ -59,8 +59,8 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "email",value = "用户邮箱",paramType = "String",required = true)
     })
-    public Result sendCode(@RequestParam("eamil"), String email){
-        userService.sendCode(email);
+    public Result sendCode(@RequestParam("eamil") String email){
+        return userService.sendCode(email);
     }
 
 

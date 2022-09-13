@@ -21,7 +21,7 @@ public class DataSourceDc implements Serializable {
     private List<String> dataType; //数据资源类型
 
     @ApiModelProperty(value = "数据量",required = true)
-    private Long size; //数据量
+    private Amount amount; //数据量
 
     @ApiModelProperty(value = "主要资源情况",required = true)
     private String dataSourceOverview; //主要资源情况

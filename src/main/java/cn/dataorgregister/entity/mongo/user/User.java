@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author ZJ
@@ -48,7 +49,6 @@ public class User implements Serializable {
     @NotBlank(message = "确认密码不能为空")
     private String repeatPassword;
 
-
-
+    private Date createTime;
 
 }

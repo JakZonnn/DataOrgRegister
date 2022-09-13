@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 @Document(collection = "datacenter")
 @Data
-public class DataCenter extends Base {
+public class DataCenter extends Base implements Serializable {
     @Id
     private String id;
 
@@ -54,15 +55,8 @@ public class DataCenter extends Base {
     private String dcType; //数据中心类型
 
     @ApiModelProperty(value = "认证与收录")
-    private List<String> certification; //认证与收录
+    private List<CertificationAndInclusion> certification; //认证与收录
 
-    @ApiModelProperty(value = "加入日期")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
-    private Date joinDate; //加入日期
-
-    @ApiModelProperty(value = "更新日期")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
-    private Date updateDate; //更新日期
 
 
     //数据中心组织机构信息

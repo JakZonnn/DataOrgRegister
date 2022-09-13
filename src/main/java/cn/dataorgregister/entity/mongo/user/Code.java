@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * @author: ZJ
  * @create: 2022-09-12 22:26
- * @Description: emailcode
+ * @Description: uservo
  */
 @Data
 @NoArgsConstructor
@@ -21,7 +21,7 @@ public class Code implements Serializable {
     @Id
     private String id;
     private String email;
-    private String code;
+    private String emailCode;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HHmmss")
     private Date createTime;

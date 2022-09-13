@@ -1,17 +1,17 @@
 server:
-  port: 8080
+  port: 81
 spring:
   application:
     name: dataorgregister
   data:
     mongodb:
-      uri: mongodb://127.0.0.1:27017/dataorg
+      uri: mongodb://10.0.82.3:27017/dataorg
   mail:
     default-encoding: utf-8
     host: mail.cstnet.cn
     port: 465
     username: casdc@cnic.cn
-    password: #找他们问一下
+    password: Ruanjianzhan0802!@#
     protocol: smtp
     properties:
       mail:
@@ -22,6 +22,9 @@ spring:
             required: true
           ssl:
             enable: true
+
+publicKey: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCVZZeUo3MFhw+RA0CmMmRqLvkr2CuzIKXsMEN4keMrGeUnSm3CjyTZt6bB5DBDIFGNIYN2qsEol34XEzGx/rBtVQ0RSq4lB/+Klzd43/EViek4z0ab+IIY6glYY1sqkZ3SgwaAtuLfT9ikCx7PbwQ+JxSI2uD43Ss9jFl9tVoK0QIDAQAB
+privateKey: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAJVll5SjcwWHD5EDQKYyZGou+SvYK7MgpewwQ3iR4ysZ5SdKbcKPJNm3psHkMEMgUY0hg3aqwSiXfhcTMbH+sG1VDRFKriUH/4qXN3jf8RWJ6TjPRpv4ghjqCVhjWyqRndKDBoC24t9P2KQLHs9vBD4nFIja4PjdKz2MWX21WgrRAgMBAAECgYB8mOgcvVz2pTfkV3QZqDl7HYYOfRGlKXt4SqBa9EEj90rYxAhalYvEUJixaKCfu1qIfATqeWrzcbVlhUqTCrkUiA0JDN5MmFniZ7SEOdlYgRc2mDwWm44fQ5FLJs9zcASmpbD9MQObCBaS3GttnRIuR4RNmLabUTRR8X/0TokV4QJBAPPBw++/8coHCgleRXKejNAn+CYX/5/qF65NPQ5HCXU+SaGH90Nm9jkdr+3a+H77PelRrRDcjg3amSNrRpxfATUCQQCc5oq6/t3/Cec0DH8rbNhkjQf46eW428YPskIhoWDW3fs1JXVxRQSG8+4+5tmRSRYAxIe0AMhVj16y8T3lXpKtAkEAtnFk0eF8e5XhMTnaCPwasQH5famgrnRr3Q36kOEidxpzye8WZuB9kipiL0khjQlHQYbcXi52NHBVBmmYpBmHsQJAc193Pf/xv/tJPtW9oXH9QRsPdLKRkLhS0PH0fQRM0FMUyMTNskfdB1tRooFgFNxYSKI7Y1p79aZiLVUFfadoVQJBAIBkjqGMJ5XXw8PcRu547vSFqAadxkmnR3Y32QjRoYga1rDV7ddZu+tz6zcOEFqDBPLehrh8tmGcy6hJUonCiao=
 
 swagger2:
   enable: true

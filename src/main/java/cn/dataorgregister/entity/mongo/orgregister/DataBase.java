@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 @Document(collection = "database")
 @Data
-public class DataBase extends Base {
+public class DataBase extends Base implements Serializable {
     //基本信息
     @Id
 //    @ApiModelProperty("主键")
@@ -47,7 +48,7 @@ public class DataBase extends Base {
     private List<String> dataType; //数据类型
 
     @ApiModelProperty(value = "数据库数据量",required = true)
-    private Long size; //数据库数据量
+    private Amount amount; //数据库数据量
 
     @ApiModelProperty(value = "数据库主页url",required = true)
     private String urlDb; //数据库主页url
@@ -65,15 +66,8 @@ public class DataBase extends Base {
     private List<String> license; //数据许可证
 
     @ApiModelProperty("认证与收录")
-    private List<String> certification; //认证与收录
+    private List<CertificationAndInclusion> certification; //认证与收录
 
-    @ApiModelProperty("加入日期")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
-    private Date joinDate; //加入日期
-
-    @ApiModelProperty("更新日期")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
-    private Date updateDate; //更新日期
 
     //数据库组织机构信息
     private OrgInfoDb orgInfoDb;

@@ -8,8 +8,8 @@ import cn.dataorgregister.entity.mongo.user.Code;
 import cn.dataorgregister.entity.mongo.user.User;
 import cn.dataorgregister.repository.mongo.*;
 import cn.dataorgregister.service.UserService;
+import cn.dataorgregister.utils.RSAUtils;
 import cn.dataorgregister.utils.VerifyCode;
-import com.mongodb.client.result.UpdateResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +21,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -38,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Value("${spring.mail.username}")
     private String sendEmail;
+
+    @Value("${privateKey}")
+    private String privateKey;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -164,18 +171,35 @@ public class UserServiceImpl implements UserService {
             return fail("参数不可为空");
         }
         String email = user.getEmail();
-        User byEmail = userRepository.findByEmail(email);
-        if (Objects.isNull(byEmail)){
-            String emailCode = byEmail.getEmailCode();
-            if (emailCode == null){
+        User emailOfUser = userRepository.findByEmail(email);
+        if (Objects.isNull(emailOfUser)){
+            Code emailOfCode = codeRepository.findByEmail(email);
+            if (Objects.isNull(emailOfCode)){
                 return new Result(HttpStatus.UNAUTHORIZED.value(), "请发送验证码到邮箱",null);
             }
-
-
-        }else{
-            return fail(HttpStatus.UNAUTHORIZED.value(),"用户已存在",null);
+            String emailCode = emailOfCode.getEmailCode();
+            Date createTime = emailOfCode.getCreateTime();
+            if (user.getEmailCode().equals(emailCode)){
+                int day = VerifyCode.differentDaysByMillisecond(createTime, new Date());
+                if (day>1){
+                    return fail(HttpStatus.UNAUTHORIZED.value(),"验证码已失效",null);
+                }
+                String depassword = RSAUtils.decode(user.getPassword(), this.privateKey);
+                String depasswordre = RSAUtils.decode(user.getRepeatPassword(), this.privateKey);
+                if (depasswordre.equals(depasswordre)){
+                    String userId = DigestUtils.md5DigestAsHex(user.getEmail().getBytes()); //将email加密用作userid
+                    String md5HashPass = DigestUtils.md5DigestAsHex(depassword.getBytes());
+                    user.setUserId(userId);
+                    user.setPassword(md5HashPass);
+                    user.setCreateTime(new Date());
+                    User save = userRepository.save(user);
+                    return success(HttpStatus.OK.value(),"用户注册成功",save);
+                }
+                return fail(HttpStatus.UNAUTHORIZED.value(),"两次输入密码不一致",null);
+            }
+            return fail(HttpStatus.UNAUTHORIZED.value(),"验证码不一致",null);
         }
-
+        return fail(HttpStatus.UNAUTHORIZED.value(),"用户已存在",null);
     }
 
     @Override
@@ -190,24 +214,36 @@ public class UserServiceImpl implements UserService {
             mailMessage.setSubject("中国科学院科学数据总中心");
             mailMessage.setText("尊敬的用户,您好:\n您的邮箱验证码为：" + code);
             javaMailSender.send(mailMessage);
+
             //将验证码存入mogodb，Code中
             Code code1 = new Code();
             code1.setEmail(email);
             code1.setCreateTime(new Date());
-            code1.setCode(code);
-            codeRepository.save(code1);
-            //查询对应邮箱是否有验证码
-            String emailCode = byEmail.getEmailCode();
+            code1.setEmailCode(code);
+            //查询Code表中是否有验证码
+            Boolean ifExist = codeRepository.existsByEmail(email);
             //没有验证码就插入，有的话更新
-            if (emailCode == null){
-                String codeInsert = mongoTemplate.insert(code, "user");
-                return success(HttpStatus.OK.value(),"验证码发送成功",codeInsert);
+            if (!ifExist){
+                codeRepository.save(code1);
+                return success(HttpStatus.OK.value(),"验证码发送成功",null);
             }
             else {
-                User user = new User();
-                Query queryCode = new Query(Criteria.where(email).is(user.getEmail()));
-                Update updateCode = new Update().set(code,user.getEmailCode());
-                UpdateResult updateResult = mongoTemplate.updateFirst(queryCode, updateCode, User.class);
+//                Date date = new Date();
+//                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//                String dateFormat = simpleDateFormat.format(date);
+                //根据email查询Code表中的emailcode，将其更新
+                Query query = new Query(Criteria.where(code1.getEmail()).is(email));
+                Update update = new Update();
+                update.set("emailCode",code);
+                update.set("createTime",new Date());
+                Code updateResult= mongoTemplate.findAndModify(query, update, Code.class);
+//                Update updateCode = new Update().set(code,code1.getEmailCode());
+//                Update updateCreateTime = new Update().set(dateFormat,code1.getCreateTime());
+//                UpdateResult updateCode1 = mongoTemplate.updateFirst(queryCode, updateCode, Code.class);
+//                UpdateResult updateTime = mongoTemplate.updateFirst(queryCode, updateCreateTime, Code.class);
+//                List<Object> updateResult = new ArrayList<>();
+//                updateResult.add(updateCode1);
+//                updateResult.add(updateTime);
                 return success(HttpStatus.OK.value(),"验证码发送成功",updateResult);
             }
         }
@@ -245,21 +281,22 @@ public class UserServiceImpl implements UserService {
     /**
     上传图片方法
      */
-    public String uploadIcon(MultipartFile file,@NotNull String path){
-        if(file )
-
-        return null;
-    }
+//    public String uploadIcon(MultipartFile file,@NotNull String path){
+//        if(file )
+//
+//        return null;
+//    }
 
 
     @Override
     public Result getSubject() {
-
+        List<Subject> all = subjectRepository.findAll();
+        return success(all);
     }
 
     @Override
     public Result getlocation() {
-
+        return success();
     }
 
     @Override

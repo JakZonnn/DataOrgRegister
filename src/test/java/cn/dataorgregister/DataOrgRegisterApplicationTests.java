@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,20 +26,20 @@ class DataOrgRegisterApplicationTests {
     /*
     解析国家/省份/区的json文件，写入mongodb中
      */
-    @Autowired
-    LocationRepository locationRepository;
-    @SneakyThrows
-    @Test
-    public void readJson(){
-        FileInputStream inputStream = new FileInputStream("D:\\大数据实验室工作\\体系组登录功能20220901\\location.json");
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder builder = new StringBuilder();
-        String str = null;
-        while((str = bufferedReader.readLine()) != null)
-        {
-            builder.append(str);
-        }
-        Map<String,Object> map = GsonUtils.gsonToMaps(builder.toString());
+//    @Autowired
+//    LocationRepository locationRepository;
+//    @SneakyThrows
+//    @Test
+//    public void readJson(){
+//        FileInputStream inputStream = new FileInputStream("D:\\大数据实验室工作\\体系组登录功能20220901\\location.json");
+//        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+//        StringBuilder builder = new StringBuilder();
+//        String str = null;
+//        while((str = bufferedReader.readLine()) != null)
+//        {
+//            builder.append(str);
+//        }
+//        Map<String,Object> map = GsonUtils.gsonToMaps(builder.toString());
 
 //        List<Map<String,Object>> data =(List<Map<String,Object>>) map.get("data");
 //        List<Location> lo = new ArrayList<>();
@@ -96,4 +97,3 @@ class DataOrgRegisterApplicationTests {
 
     }
 
-}
