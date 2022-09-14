@@ -1,15 +1,20 @@
 package cn.dataorgregister.service.impl;
 
+import cn.dataorgregister.common.Enums;
 import cn.dataorgregister.entity.Result;
 import cn.dataorgregister.entity.mongo.*;
 import cn.dataorgregister.entity.mongo.orgregister.DataBase;
 import cn.dataorgregister.entity.mongo.orgregister.DataCenter;
 import cn.dataorgregister.entity.mongo.user.Code;
 import cn.dataorgregister.entity.mongo.user.User;
+import cn.dataorgregister.entity.mongo.user.UserLogin;
 import cn.dataorgregister.repository.mongo.*;
 import cn.dataorgregister.service.UserService;
+import cn.dataorgregister.utils.CaffeineUtil;
 import cn.dataorgregister.utils.RSAUtils;
 import cn.dataorgregister.utils.VerifyCode;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +27,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import com.github.benmanes.caffeine.cache.Cache;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -39,6 +48,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final JavaMailSender javaMailSender;
+
+    private final Cache<String, String> publicModel = CaffeineUtil.getPublicModel();
 
     @Value("${spring.mail.username}")
     private String sendEmail;
@@ -97,10 +108,16 @@ public class UserServiceImpl implements UserService {
     private DataTypesRepository dataTypesRepository;
 
     @Autowired
+    private LocationRepository locationRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private CodeRepository codeRepository;
+
+    @Autowired
+    private UserLoginRepository userLoginRepository;
 
 
 //    @Override
@@ -232,7 +249,7 @@ public class UserServiceImpl implements UserService {
 //                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //                String dateFormat = simpleDateFormat.format(date);
                 //根据email查询Code表中的emailcode，将其更新
-                Query query = new Query(Criteria.where(code1.getEmail()).is(email));
+                Query query = new Query(Criteria.where("email").is(email));
                 Update update = new Update();
                 update.set("emailCode",code);
                 update.set("createTime",new Date());
@@ -248,6 +265,33 @@ public class UserServiceImpl implements UserService {
             }
         }
         return fail(HttpStatus.UNAUTHORIZED.value(),"该邮箱已被注册",null);
+    }
+
+    @Override
+    public Result login(UserLogin userLogin, HttpServletResponse response) {
+        if (userLogin == null){
+            return fail(HttpStatus.INTERNAL_SERVER_ERROR.value(),"参数不能为空",null);
+        }
+        User byEmail = userRepository.findByEmail(userLogin.getEmail());
+        if (Objects.isNull(byEmail) || !byEmail.getEmail().equals(userLogin.getEmail())){
+            return fail(Enums.USER401001.code(),Enums.USER401001.msg(),null);
+        }
+        //解密前端传来的密码
+        String decodePw = RSAUtils.decode(userLogin.getPassword(), this.privateKey);
+        //用md5加密密码，并和User中的密码进行比较
+        String md5Pw = DigestUtils.md5DigestAsHex(decodePw.getBytes());
+        if (!(md5Pw == byEmail.getPassword())){
+            return fail(Enums.PARAM_EXCEP.code(),Enums.PARAM_EXCEP.msg(),null);
+        }
+        //将登录用户存入UserLogin表中
+        userLoginRepository.save(userLogin);
+        //保存cookie
+        Cookie cookie = new Cookie("userEmail",userLogin.getEmail());
+        cookie.setMaxAge(7*24*60*30);
+        cookie.setVersion(1);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        return success(HttpStatus.OK.value(),"登录成功",null);
     }
 
     @Override
@@ -290,13 +334,79 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result getSubject() {
-        List<Subject> all = subjectRepository.findAll();
-        return success(all);
+        String subjectList = publicModel.getIfPresent("subject");
+        if (StringUtils.isEmpty(subjectList)) {
+
+            Map<String, Object> map = new HashMap<>();
+            Map<String, Object> oneSubjectMap = new HashMap<>();
+            List<Subject> all = mongoTemplate.findAll(Subject.class);
+            all.stream().forEachOrdered(subject -> {
+                String oneName = subject.getOne_rank_name();
+                if (map.containsKey(oneName)) {
+                    Map twoMap = (Map<String, Object>) map.get(oneName);
+                    String two_rank_name = subject.getTwo_rank_name();
+                    if (twoMap.containsKey(two_rank_name)) {
+                        ((List) twoMap.get(two_rank_name)).add(subject.getThree_rank_name());
+                    } else {
+                        twoMap.put(two_rank_name, new ArrayList<String>() {{
+                            add(subject.getThree_rank_name());
+                        }});
+                    }
+                } else {
+                    Map<String, List<String>> twoMap = new HashMap<>();
+                    twoMap.put(subject.getTwo_rank_name(), new ArrayList<String>() {{
+                        add(subject.getThree_rank_name());
+                    }});
+                    map.put(oneName, twoMap);
+                    Map<String, String> subMap = new HashMap<>();
+                    subMap.put("code", subject.getOne_rank_no());
+                    subMap.put("enName", "");
+                    oneSubjectMap.put(oneName, subMap);
+                }
+            });
+            List<Map<String, Object>> resultList = new LinkedList<>();
+            map.entrySet().stream().forEachOrdered(sub -> {
+                String key = sub.getKey();
+                List<Map<String, Object>> twoList = new LinkedList<>();
+                Map<String, Object> twoMap = (Map<String, Object>) sub.getValue();
+                twoMap.entrySet().stream().forEachOrdered(subTwo -> {
+                    String key1 = subTwo.getKey();
+                    Map<String, Object> threeMap = new HashMap<>();
+                    threeMap.put("value", key1);
+                    threeMap.put("label", key1);
+                    List<String> list = (List<String>) subTwo.getValue();
+                    List<Map<String, Object>> threeList = new LinkedList<>();
+                    Iterator<String> iterator = list.iterator();
+                    while (iterator.hasNext()) {
+                        String next = iterator.next();
+                        Map<String, Object> mm = new HashMap<>();
+                        mm.put("value", next);
+                        mm.put("label", next);
+                        threeList.add(mm);
+                    }
+                    threeMap.put("children", threeList);
+                    twoList.add(threeMap);
+                });
+                Map<String, Object> oneMap = new HashMap<>();
+                oneMap.put("label", key);
+                oneMap.put("value", key);
+                oneMap.put("children", twoList);
+                resultList.add(oneMap);
+            });
+
+            String s = JSON.toJSONString(resultList);
+            publicModel.put("subject", s);
+            publicModel.put("querySubject", JSON.toJSONString(oneSubjectMap));
+            return success(resultList);
+        }
+        List list = JSONObject.parseObject(subjectList, List.class);
+        return success(list);
     }
 
     @Override
     public Result getlocation() {
-        return success();
+        List<Location> all = locationRepository.findAll();
+        return success(all);
     }
 
     @Override

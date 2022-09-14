@@ -10,12 +10,14 @@ public class Subject {
   @Id
   private String id;
 
-  private String oneRankId;
-  private String threeRankId;
-  private String twoRankId;
-  private String oneRankName;
-  private String threeRankName;
-  private String threeRankNo;
+  private String one_rank_no;
+  private String one_rank_name;
+
+  private String two_rank_no;
+  private String two_rank_name;
+
+  private String three_rank_no;
+  private String three_rank_name;
 
 
 //  public String getId() {

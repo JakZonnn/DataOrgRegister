@@ -5,7 +5,10 @@ import cn.dataorgregister.entity.Result;
 import cn.dataorgregister.entity.mongo.orgregister.DataBase;
 import cn.dataorgregister.entity.mongo.orgregister.DataCenter;
 import cn.dataorgregister.entity.mongo.user.User;
+import cn.dataorgregister.entity.mongo.user.UserLogin;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 public interface UserService extends CommonService{
 //    void writeData(DataBase registerDb);
@@ -50,6 +53,8 @@ public interface UserService extends CommonService{
     Result getUniIdentifierSystem();
 
     Result getlocation();
+
+    Result login(UserLogin userLogin, HttpServletResponse response);
 
 
 //    void writeDataType(UniIdentifierSystem uniIdentifierSystem);

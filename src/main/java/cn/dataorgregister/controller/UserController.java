@@ -5,6 +5,7 @@ import cn.dataorgregister.entity.Result;
 import cn.dataorgregister.entity.mongo.orgregister.DataBase;
 import cn.dataorgregister.entity.mongo.orgregister.DataCenter;
 import cn.dataorgregister.entity.mongo.user.User;
+import cn.dataorgregister.entity.mongo.user.UserLogin;
 import cn.dataorgregister.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 /**
@@ -50,8 +52,7 @@ public class UserController {
     @ApiOperation("用户注册")
     @PostMapping("/register")
     public Result register(@Valid User user){
-        Result register = userService.register(user);
-        return register;
+        return userService.register(user);
     }
 
     @ApiOperation("用户注册发送验证码")
@@ -61,6 +62,12 @@ public class UserController {
     })
     public Result sendCode(@RequestParam("eamil") String email){
         return userService.sendCode(email);
+    }
+
+    @ApiOperation("用户登录")
+    @PostMapping("/login")
+    public Result login(@Valid UserLogin userLogin, HttpServletResponse response){
+        return userService.login(userLogin,response);
     }
 
 
