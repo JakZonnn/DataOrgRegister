@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import com.github.benmanes.caffeine.cache.Cache;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
@@ -299,11 +300,7 @@ public class UserServiceImpl implements UserService {
         if(!Objects.nonNull(dataBase)){
             return fail("注册内容不可为空");
         }
-        DataBase save = dataBaseRepository.save(dataBase);
-        if(save != null){
-            return success();
-        }
-        return fail();
+        return null;
 
     }
 

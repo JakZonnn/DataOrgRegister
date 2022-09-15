@@ -5,120 +5,31 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
+
 @Data
 @Document(collection = "location")
-public class Location {
+public class Location implements Serializable {
 
   @Id
   private String id;
+
+  @Field("area_code")
   private String areaCode;
+  @Field("zip_code")
   private String zipCode;
   private String prefectural;
+  @Field("city_en_name")
   private String cityEnName;
   private String province;
+  @Field("city_lat")
   private double cityLat;
+  @Field("city_long")
   private double cityLong;
+  @Field("city_zh_name")
   private String cityZhName;
   private String country;
 //  @Field("id")
 //  private long field;
 
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-
-  public String getAreaCode() {
-    return areaCode;
-  }
-
-  public void setAreaCode(String areaCode) {
-    this.areaCode = areaCode;
-  }
-
-
-  public String getZipCode() {
-    return zipCode;
-  }
-
-  public void setZipCode(String zipCode) {
-    this.zipCode = zipCode;
-  }
-
-
-  public String getPrefectural() {
-    return prefectural;
-  }
-
-  public void setPrefectural(String prefectural) {
-    this.prefectural = prefectural;
-  }
-
-
-  public String getCityEnName() {
-    return cityEnName;
-  }
-
-  public void setCityEnName(String cityEnName) {
-    this.cityEnName = cityEnName;
-  }
-
-
-  public String getProvince() {
-    return province;
-  }
-
-  public void setProvince(String province) {
-    this.province = province;
-  }
-
-
-  public double getCityLat() {
-    return cityLat;
-  }
-
-  public void setCityLat(double cityLat) {
-    this.cityLat = cityLat;
-  }
-
-
-  public double getCityLong() {
-    return cityLong;
-  }
-
-  public void setCityLong(double cityLong) {
-    this.cityLong = cityLong;
-  }
-
-
-  public String getCityZhName() {
-    return cityZhName;
-  }
-
-  public void setCityZhName(String cityZhName) {
-    this.cityZhName = cityZhName;
-  }
-
-
-  public String getCountry() {
-    return country;
-  }
-
-  public void setCountry(String country) {
-    this.country = country;
-  }
-
-
-//  public long getField() {
-//    return field;
-//  }
-//
-//  public void setField(long field) {
-//    this.field = field;
-//  }
 }

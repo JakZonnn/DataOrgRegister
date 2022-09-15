@@ -3,9 +3,14 @@ package cn.dataorgregister.entity.mongo.orgregister;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -24,9 +29,11 @@ public class DataBase extends Base implements Serializable {
     private String id;
 
     @ApiModelProperty(value = "数据库中文名称",required = true)
+    @NotBlank(message = "数据库英文名称不能为空")
     private String dataBaseNameEN; //数据库英文名称
 
     @ApiModelProperty(value = "数据库英文名称",required = true)
+    @NotBlank(message = "数据库中文名称不能为空")
     private String dataBaseNameCN; //数据库中文名称
 
     @ApiModelProperty("数据库唯一标识符")
@@ -36,24 +43,33 @@ public class DataBase extends Base implements Serializable {
     private String abbEN; //英文名称缩写
 
     @ApiModelProperty(value = "数据库介绍英文",required = true)
+    @NotBlank(message = "数据库英文介绍不能为空")
+    @Length(min = 2,max = 100,message = "介绍不能超过100字")
     private String introductionEN;
 
     @ApiModelProperty(value = "数据库介绍中文",required = true)
+    @NotBlank(message = "数据库中文介绍不能为空")
+    @Length(min = 2,max = 300,message = "介绍不能超过300字")
     private String introductionCN;
 
     @ApiModelProperty(value = "学科分类",required = true)
-    private List<String> subjectsId; //学科分类id
+    @NotEmpty(message = "学科分类不能为空")
+    private List<String> subjects; //学科分类
 
     @ApiModelProperty(value = "数据类型",required = true)
+    @NotEmpty(message = "数据类型不能为空")
     private List<String> dataType; //数据类型
 
     @ApiModelProperty(value = "数据库数据量",required = true)
+    @NotNull(message = "数据量不能为空")
     private Amount amount; //数据库数据量
 
     @ApiModelProperty(value = "数据库主页url",required = true)
+    @NotBlank(message = "数据库主页url不能为空")
     private String urlDb; //数据库主页url
 
     @ApiModelProperty(value = "数据集条数",required = true)
+    @NotNull(message = "数据集条数不能为空")
     private Long count; //数据集条数
 
     @ApiModelProperty("logo")

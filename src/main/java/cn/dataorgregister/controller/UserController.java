@@ -77,7 +77,7 @@ public class UserController {
             @ApiImplicitParam(name = "DataBase", required = true, value = "数据库注册")
     })
     @PostMapping("/registerDatabase")
-    public Result registerDb(@RequestBody DataBase dataBase, MultipartFile file) {
+    public Result registerDb(@Valid DataBase dataBase, MultipartFile file) {
         return userService.registerDb(dataBase,file);
     }
 
@@ -86,7 +86,7 @@ public class UserController {
             @ApiImplicitParam(name = "DataCenter", required = true, value = "数据中心注册")
     })
     @PostMapping("/registerDataCenter")
-    public Result registerDc(@RequestBody DataCenter dataCenter, MultipartFile file) {
+    public Result registerDc(@Valid DataCenter dataCenter, MultipartFile file) {
         return userService.registerDc(dataCenter,file);
     }
 
