@@ -12,6 +12,7 @@ import cn.dataorgregister.repository.mongo.*;
 import cn.dataorgregister.service.UserService;
 import cn.dataorgregister.utils.CaffeineUtil;
 import cn.dataorgregister.utils.RSAUtils;
+import cn.dataorgregister.utils.UploadFileUtils;
 import cn.dataorgregister.utils.VerifyCode;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -23,6 +24,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -34,7 +36,10 @@ import com.github.benmanes.caffeine.cache.Cache;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
+import java.awt.dnd.DropTarget;
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -300,8 +305,31 @@ public class UserServiceImpl implements UserService {
         if(!Objects.nonNull(dataBase)){
             return fail("注册内容不可为空");
         }
-        return null;
+        //根据数据库中文和英文名判断是否已经存在
+        DataBase byDataBaseNameCN = dataBaseRepository.findByDataBaseNameCN(dataBase.getDataBaseNameCN());
+        DataBase byDataBaseNameEN = dataBaseRepository.findByDataBaseNameEN(dataBase.getDataBaseNameEN());
+        if (Objects.nonNull(byDataBaseNameCN) || Objects.nonNull(byDataBaseNameEN)){
+            fail(HttpStatus.UNAUTHORIZED.value(),"该数据库已注册",null);
+        }
+        //数据库注册上传的文件存放的路径
+        String dataFilePath = "/data" + File.separator + "testPackage" + File.separator + "database" + File.separator + dataBase.getDataBaseNameCN();
+        //图片存储路径
+        String ImagePath = dataFilePath + File.separator + "Image";
+        Map map = UploadFileUtils.uploadImage(file, dataBase.getDataBaseNameCN(), ImagePath);
+        if(Objects.isNull(map) || !"200".equals(map.get("code"))){
+            return fail((String) map.get("msg"));
+        }else {
+            dataBase.setLogoPath((String) map.get("path"));
+        };
 
+
+        //数据政策文件存储路径
+        String DocuPath = dataFilePath + File.separator + "Document";
+
+
+
+
+        return null;
     }
 
     @Override
@@ -318,15 +346,6 @@ public class UserServiceImpl implements UserService {
         return fail();
     }
 
-
-    /**
-    上传图片方法
-     */
-//    public String uploadIcon(MultipartFile file,@NotNull String path){
-//        if(file )
-//
-//        return null;
-//    }
 
 
     @Override

@@ -6,5 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DataBaseRepository extends MongoRepository<DataBase, String> {
+    DataBase findByDataBaseNameCN(String databaseNameCn);
+    DataBase findByDataBaseNameEN(String databaseNameEn);
+
 
 }

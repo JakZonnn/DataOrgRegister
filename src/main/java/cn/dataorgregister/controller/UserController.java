@@ -91,6 +91,7 @@ public class UserController {
     }
 
     // TODO: 2022/9/9 需考虑
+    // TODO: 2022/9/16 已经返给前端，尚不清楚是否修改
     @ApiOperation("查看学科分类")
     @GetMapping("/getSubject")
     public Result getSubject(){
@@ -98,6 +99,7 @@ public class UserController {
     }
 
     // TODO: 2022/9/9 需考虑
+    // TODO: 2022/9/16 已经返给前端，尚不清楚是否修改
     @ApiOperation("查看地点")
     @GetMapping("/getLocation")
     public Result getLocation(){
